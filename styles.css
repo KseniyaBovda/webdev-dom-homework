@@ -14,6 +14,11 @@ body {
     min-height: 100vh;
   }
 
+  .ul-list {
+    padding: 0;
+    margin: 0;
+  }
+
   .comments,
   .comment {
     margin: 0;
@@ -42,6 +47,7 @@ body {
 
   .comment {
     padding: 48px;
+    margin-bottom: 48px;
   }
 
   .comment-header {
@@ -52,7 +58,7 @@ body {
 
   .comment-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .comment-body {
@@ -134,4 +140,37 @@ body {
 
   .add-form-button:hover {
     opacity: 0.9;
+  }
+
+  .delite {
+    padding-left: 356px;
+  }
+
+  .delite-button{
+    font-size: 12px;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+  }
+
+  .edit-on {
+    margin-top: 24px;
+    font-size:16px;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+  }
+
+  .edit-save {
+    margin-top: 24px;
+    font-size:16px;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
   }
