@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <ul class="ul-list" id="list">
-     <!-- Список рендерится из JS -->
+      <!-- Список рендерится из JS -->
     </ul>
     <div class="delite">
       <button class="delite-button" id="delite-comment">Удалить последний комментарий</button>
@@ -32,10 +32,6 @@
   .error::placeholder {
     color: wheat;
   }
-
-  .edit-save {
-    display: none;
-  }
 </style>
 
 <script>
@@ -48,36 +44,37 @@
 
   buttonElement.disabled = true;
 
+
   const buttonDeliteElement = document.getElementById("delite-comment");
 
   const userComments = document.querySelectorAll('.comment');
   const likeButtonsElements = document.querySelectorAll('.likes')
 
-  
+
   // перенос данных из разметки 
 
   const comments = [
     {
-      name: "Глеб Фокин" ,
-      commentText: "Это будет первый комментарий на этой странице" ,
-      time: "12.02.22 12:18" ,
-      like: 3 ,
-      likeStatus: "like-button"
+      name: "Глеб Фокин",
+      commentText: "Это будет первый комментарий на этой странице",
+      time: "12.02.22 12:18",
+      like: 3,
+      likeStatus: false
     },
     {
-      name: "Варвара Н." ,
-      commentText: "Мне нравится как оформлена эта страница! ❤" ,
-      time: "13.02.22 19:22" ,
-      like: 75 ,
-      likeStatus: "like-button -active-like"
+      name: "Варвара Н.",
+      commentText: "Мне нравится как оформлена эта страница! ❤",
+      time: "13.02.22 19:22",
+      like: 75,
+      likeStatus: false
     }
   ];
 
-// рендер 
+  // рендер 
 
   const renderComments = () => {
     const commentsHtml = comments.map((comment, index) => {
-      return `<li class="comment" data-comment="${comment.commentText}">
+      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}">
         <div class="comment-header">
           <div>${comment.name}</div>
           <div>${comment.time}</div>
@@ -88,13 +85,13 @@
           </div>
         </div>
         <div class="comment-footer"> 
-          <div class="edit">
-              <button class="edit-on">Редактировать</button>
-              <button class="edit-save">Сохранить</button>
+          <div class="edit" data-edit="${index}" data-save="${index}">
+              <button class="edit-on" data-edit="${index}">Редактировать</button>
+              <button class="edit-save" data-save="${index}">Сохранить</button>
             </div>
           <div class="likes" data-button="${index}" data-counter="${comment.like}">
             <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
-            <button class = ${comment.likeStatus}  data-button="${index}"></button>
+            <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
           </div>
         </div>
       </li>`
@@ -102,41 +99,35 @@
 
     listElement.innerHTML = commentsHtml;
 
-    initEventListeners();
+    // initEditListeners();
     initLikeButtonsListeners();
   }
 
 
   // редактирование комментария
 
-  const initEventListeners = () => {
-
-    const userComments = document.querySelectorAll('.comment')
-
-    for (const userComment of userComments) {
-      userComment.addEventListener('click', () => {
-        console.log(userComment.dataset.comment);
-      });
-    }
-  };
 
 
-  // обработчик клика лайка
+
+
+  //обработчик клика лайка
 
   const initLikeButtonsListeners = () => {
     const likeElements = document.querySelectorAll('.likes');
 
     for (const likeElement of likeElements) {
+
+      const index = likeElement.dataset.button;
+      const heart = likeElement.dataset.counter;
+
       likeElement.addEventListener("click", () => {
-        const index = likeElement.dataset.button;
-        const heart = likeElement.dataset.counter;
-        
-        if (comments[index].likeStatus === "like-button") {
+
+        if (comments[index].likeStatus === false) {
           comments[index].like += 1;
-          comments[index].likeStatus = "like-button -active-like";
+          comments[index].likeStatus = true;
         } else {
           comments[index].like -= 1;
-          comments[index].likeStatus = "like-button";
+          comments[index].likeStatus = false;
         }
 
         renderComments();
@@ -144,7 +135,24 @@
     }
   }
 
- renderComments();
+  renderComments();
+
+  // Ответы на комментарии
+
+  // listElement.addEventListener("click", () => {
+
+  //   const userComments = document.querySelectorAll('.comment');
+
+  //   for (const userComment of userComments) {
+
+  //     const textComment = userComment.dataset.comment;
+  //     const nameComment = userComment.dataset.name;
+
+  //     commentInputElement.value = `${nameComment} ${textComment}`;
+  //   };
+    
+
+  // });
 
   // функция отображает комментарий
 
@@ -175,11 +183,11 @@
     }
 
     comments.push({
-      name: nameInputElement.value ,
-      commentText: commentInputElement.value ,
-      time: dateElement() ,
+      name: nameInputElement.value,
+      commentText: commentInputElement.value,
+      time: dateElement(),
       like: 0,
-      likeStatus: "like-button"
+      likeStatus: false
     });
 
     renderComments();
@@ -202,12 +210,12 @@
   // блок кнопки 
 
   function checkValue() {
-    if (nameInputElement.value.trim() === ''){
+    if (nameInputElement.value.trim() === '') {
       buttonElement.disabled = true;
       return;
     }
 
-    if (commentInputElement.value === '') {
+    if (commentInputElement.value.trim() === '') {
       buttonElement.disabled = true;
       return;
     }
@@ -215,7 +223,7 @@
     buttonElement.disabled = false;
   }
 
-  nameInputElement.addEventListener('input',checkValue);
+  nameInputElement.addEventListener('input', checkValue);
   commentInputElement.addEventListener('input', checkValue);
 
   // удаление последнего элемента 
@@ -228,9 +236,6 @@
 
 
   console.log("It works!");
-
-  // ответ на комментарий
-
 
   // безопасность 
 
