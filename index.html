@@ -44,7 +44,6 @@
 
   buttonElement.disabled = true;
 
-
   const buttonDeliteElement = document.getElementById("delite-comment");
 
   const userComments = document.querySelectorAll('.comment');
@@ -87,7 +86,7 @@
         <div class="comment-footer"> 
           <div class="edit" data-edit="${index}" data-save="${index}">
               <button class="edit-on" data-edit="${index}">Редактировать</button>
-              <button class="edit-save" data-save="${index}">Сохранить</button>
+              <button class="edit-save"data-save="${index}">Сохранить</button>
             </div>
           <div class="likes" data-button="${index}" data-counter="${comment.like}">
             <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
@@ -99,14 +98,74 @@
 
     listElement.innerHTML = commentsHtml;
 
-    // initEditListeners();
+    initEditListeners();
+    initSaveChangesListeners();
     initLikeButtonsListeners();
   }
 
 
   // редактирование комментария
 
+  function initEditListeners() {
+    const editButtons = document.querySelectorAll('.edit-on')
 
+    for (const editButton of editButtons) {
+      editButton.addEventListener("click", () => {
+        const index = editButton.dataset.edit;
+        const value = comments[index].commentText
+
+        const commentElement = document.querySelector(`[data-indx="${index}"]`)
+        console.log(commentElement)
+
+        const bodyOfCommentElement = commentElement.querySelector('.comment-body')
+        console.log(bodyOfCommentElement)
+        // Удаляем элемент comment-text
+        const commentTextElement = bodyOfCommentElement.querySelector('.comment-text')
+        commentTextElement.remove()
+
+        // Создаём и вставляем элемент textarea
+        const textAreaElement = document.createElement('textarea')
+        textAreaElement.value = value
+        bodyOfCommentElement.append(textAreaElement)
+
+        const saveChangesButtons = document.querySelectorAll('.edit-save')
+        saveChangesButtons.style.display = "none"
+
+      })
+    }
+  }
+
+
+  function initSaveChangesListeners() {
+    const saveChangesButtons = document.querySelectorAll('.edit-save')
+
+    for (const saveChangesButton of saveChangesButtons) {
+      saveChangesButton.addEventListener("click", () => {
+        const index = saveChangesButton.dataset.save;
+        const commentElement = document.querySelector(`[data-indx="${index}"]`);
+        const textAreaElement = commentElement.querySelector('textarea');
+        const newCommentText = textAreaElement.value;
+        comments[index].commentText = newCommentText;
+
+        // Удаляем textarea
+        textAreaElement.remove();
+
+        // Создаём и вставляем элемент comment-text
+        const commentBodyElement = commentElement.querySelector('.comment-body');
+        const commentTextElement = document.createElement('div');
+        commentTextElement.classList.add('comment-text');
+        commentTextElement.textContent = newCommentText;
+        commentBodyElement.append(commentTextElement);
+
+        // Меняем кнопки
+        const editButton = commentElement.querySelector('.edit-on');
+        editButton.style.display = "inline-block";
+        saveChangesButton.style.display = "none";
+
+        renderComments();
+      })
+    }
+  }
 
 
 
@@ -150,7 +209,7 @@
 
   //     commentInputElement.value = `${nameComment} ${textComment}`;
   //   };
-    
+
 
   // });
 
