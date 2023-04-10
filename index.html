@@ -73,7 +73,7 @@
 
   const renderComments = () => {
     const commentsHtml = comments.map((comment, index) => {
-      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}">
+      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name=${comment.name}>
         <div class="comment-header">
           <div>${comment.name}</div>
           <div>${comment.time}</div>
@@ -179,8 +179,9 @@
       const index = likeElement.dataset.button;
       const heart = likeElement.dataset.counter;
 
-      likeElement.addEventListener("click", () => {
-
+      likeElement.addEventListener("click", (event) => {
+        event.stopPropagation();
+        
         if (comments[index].likeStatus === false) {
           comments[index].like += 1;
           comments[index].likeStatus = true;
@@ -198,20 +199,23 @@
 
   // Ответы на комментарии
 
-  // listElement.addEventListener("click", () => {
+  const answers = () => {
+   
+    const userComments = document.querySelectorAll('.comment');
 
-  //   const userComments = document.querySelectorAll('.comment');
+    for (const userComment of userComments) {
+    
+      listElement.addEventListener("click", () => {
+    
+      const nameComment = userComment.dataset.name;
+      const textComment = userComment.dataset.comment;
+    
+      commentInputElement.value = `>${textComment} \n ${nameComment}, `;
+    })
+    }
+  };
+  answers();
 
-  //   for (const userComment of userComments) {
-
-  //     const textComment = userComment.dataset.comment;
-  //     const nameComment = userComment.dataset.name;
-
-  //     commentInputElement.value = `${nameComment} ${textComment}`;
-  //   };
-
-
-  // });
 
   // функция отображает комментарий
 
@@ -242,8 +246,8 @@
     }
 
     comments.push({
-      name: nameInputElement.value,
-      commentText: commentInputElement.value,
+      name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+      commentText: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
       time: dateElement(),
       like: 0,
       likeStatus: false
