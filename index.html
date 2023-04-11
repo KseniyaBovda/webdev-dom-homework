@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Проект "Комменты"</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект "Комменты"</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  </html>
 
 <body>
   <div class="container">
@@ -205,12 +210,13 @@
 
     for (const userComment of userComments) {
     
-      listElement.addEventListener("click", () => {
+      userComment.addEventListener("click", () => {
     
       const nameComment = userComment.dataset.name;
       const textComment = userComment.dataset.comment;
     
       commentInputElement.value = `>${textComment} \n ${nameComment}, `;
+      return;
     })
     }
   };
