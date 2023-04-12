@@ -103,6 +103,7 @@
 
     listElement.innerHTML = commentsHtml;
 
+    answers();
     initEditListeners();
     initSaveChangesListeners();
     initLikeButtonsListeners();
@@ -200,7 +201,7 @@
     }
   }
 
-  renderComments();
+
 
   // Ответы на комментарии
 
@@ -216,12 +217,11 @@
       const textComment = userComment.dataset.comment;
     
       commentInputElement.value = `>${textComment} \n ${nameComment}, `;
-      return;
+      renderComments();
     })
     }
   };
-  answers();
-
+  renderComments();
 
   // функция отображает комментарий
 
