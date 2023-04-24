@@ -59,7 +59,7 @@
 
   const editButtonElements = document.querySelectorAll('.comment-body');
 
-  // API-POST
+  // API-GET
 
   const fetchComment = () => {
     fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
@@ -75,7 +75,7 @@
           return {
             name: comment.author.name,
             commentText: comment.text,
-            time: comment.date,
+            time: new Date(comment.date).toLocaleString().slice(0, -3),
             like: comment.likes,
             likeStatus: comment.isLiked ? true : false,
           };
@@ -86,7 +86,7 @@
 
   // API-POST
 
-  const postComment = (text) => {
+  const postComment = () => {
     const fetchPromise = fetch(
       'https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
       {
@@ -95,11 +95,13 @@
           name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
           text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
         }),
-      });
-  };
+      }).then(() => {
+          fetchComment();
+        });
+  }; 
   
   fetchComment();
-  postComment();
+
 
 
   // Перенос данных из разметки 
@@ -317,6 +319,9 @@
     const listElements = document.querySelector('ul');
     const lastCommentIndex = listElements.innerHTML.lastIndexOf(`<li class="comment"`);
     listElements.innerHTML = listElements.innerHTML.substring(0, lastCommentIndex);
+    initLikeButtonsListeners();
+    initEditButtonListeners();
+    answers();
   });
 
 
