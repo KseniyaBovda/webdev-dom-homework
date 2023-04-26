@@ -59,9 +59,66 @@
 
   const editButtonElements = document.querySelectorAll('.comment-body');
 
-  // API-GET
+  // Перенос данных из разметки
 
-  const fetchComment = () => {
+  let comments = [
+    // {
+    //   name: "Глеб Фокин",
+    //   commentText: "Это будет первый комментарий на этой странице",
+    //   time: "12.02.22 12:18",
+    //   like: 3,
+    //   likeStatus: false,
+    // },
+    // {
+    //   name: "Варвара Н.",
+    //   commentText: "Мне нравится как оформлена эта страница! ❤",
+    //   time: "13.02.22 19:22",
+    //   like: 75,
+    //   likeStatus: false,
+    // }
+  ];
+
+  // Рендер
+
+  const renderComments = () => {
+    const commentsHtml = comments.map((comment, index) => {
+      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
+        <div class="comment-header">
+          <div>${comment.name}</div>
+          <div>${comment.time}</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            ${comment.commentText}
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="edit">
+              <button class="edit-button" data-edit="${index}">Редактировать</button>
+            </div>
+          <div class="likes" data-button="${index}" data-counter="${comment.like}">
+            <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
+            <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
+          </div>
+        </div>
+      </li>`
+    }).join("");
+
+    listElement.innerHTML = commentsHtml;
+
+    initLikeButtonsListeners();
+    initEditButtonListeners();
+    answers();
+  };
+
+  // API
+  
+  const loadingElement = document.createElement("span");
+  loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
+  listElement.appendChild(loadingElement);
+
+  const getComment = () => {
+    
     fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
       {
         method: "GET"
@@ -81,84 +138,54 @@
           };
         });
         renderComments();
+        loadingElement.style.display="none";
       });
   };
 
-  // API-POST
+  const fetchComment = () => {
+    buttonElement.disabled = true;
+    loadingElement.textContent = "Комментарий загружается...";
+    loadingElement.style.display = "block";
+    listElement.appendChild(loadingElement);
+    fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
+      method: "POST",
+      body: JSON.stringify({
+        name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+        text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+      }),
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      return fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
+        method: "GET",
+      });
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      comments = responseData.comments.map((comment) => {
+        return {
+          name: comment.author.name,
+          commentText: comment.text,
+          time: new Date(comment.date).toLocaleString().slice(0, -3),
+          like: comment.likes,
+          likeStatus: comment.isLiked ? true : false,
+        };
+      });
+      renderComments();
+      loadingElement.style.display = "none";
+    });
 
-  const postComment = () => {
-    const fetchPromise = fetch(
-      'https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
-      {
-        method: "POST",
-        body: JSON.stringify({
-          name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-          text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-        }),
-      }).then(() => {
-          fetchComment();
-        });
-  }; 
-  
-  fetchComment();
-
-
-
-  // Перенос данных из разметки 
-
-  let comments = [
-    // {
-    //   name: "Глеб Фокин",
-    //   commentText: "Это будет первый комментарий на этой странице",
-    //   time: "12.02.22 12:18",
-    //   like: 3,
-    //   likeStatus: false,
-    // },
-    // {
-    //   name: "Варвара Н.",
-    //   commentText: "Мне нравится как оформлена эта страница! ❤",
-    //   time: "13.02.22 19:22",
-    //   like: 75,
-    //   likeStatus: false,
-    // }
-  ];
-
-  // Рендер 
-
-  const renderComments = () => {
-    const commentsHtml = comments.map((comment, index) => {
-      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
-        <div class="comment-header">
-          <div>${comment.name}</div>
-          <div>${comment.time}</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">
-            ${comment.commentText}
-          </div>
-        </div>
-        <div class="comment-footer"> 
-          <div class="edit">
-              <button class="edit-button" data-edit="${index}">Редактировать</button>
-            </div>
-          <div class="likes" data-button="${index}" data-counter="${comment.like}">
-            <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
-            <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
-          </div>
-        </div>
-      </li>`
-    }).join("");
-
-    listElement.innerHTML = commentsHtml;
-
-    initLikeButtonsListeners();
-    initEditButtonListeners();
-    answers();
   };
+
+  getComment();
 
   // Обработчик клика лайка
 
-  const initLikeButtonsListeners = () => {
+  function initLikeButtonsListeners() {
     const likeElements = document.querySelectorAll('.likes');
 
     for (const likeElement of likeElements) {
@@ -220,7 +247,7 @@
 
   // Ответы на комментарии
 
-  const answers = () => {
+  function answers() {
 
     const userComments = document.querySelectorAll('.comment');
 
@@ -229,17 +256,21 @@
       userComment.addEventListener("click", (event) => {
         event.stopPropagation();
 
+        if (event.target.classList.contains('comment-textarea')) {
+          return;
+        }
+
         const nameComment = userComment.dataset.name;
         const textComment = userComment.dataset.comment;
 
-        commentInputElement.value = `>${textComment} \n ${nameComment}, `;
+        commentInputElement.value = `>${textComment} \n ${nameComment},`;
 
       })
     }
   };
   renderComments();
 
-
+  
   // Функция отображает комментарий
 
   function showComment() {
@@ -275,7 +306,9 @@
     //   like: 0,
     //   likeStatus: false
     // });
-    postComment();
+    // postComment();
+
+    fetchComment();
 
     renderComments();
 
@@ -283,7 +316,7 @@
     commentInputElement.value = "";
   };
 
-  // Через кнопку 
+  // Через кнопку
 
   document.addEventListener('keyup', function (event) {
     if (event.code == 'Enter' || event.code == 'NumpadEnter') showComment();
@@ -294,7 +327,7 @@
 
   buttonElement.addEventListener('click', showComment);
 
-  // Блок кнопки 
+  // Блок кнопки
 
   function checkValue() {
     if (nameInputElement.value.trim() === '') {
@@ -313,7 +346,7 @@
   nameInputElement.addEventListener('input', checkValue);
   commentInputElement.addEventListener('input', checkValue);
 
-  // Удаление последнего элемента 
+  // Удаление последнего элемента
 
   buttonDeliteElement.addEventListener("click", () => {
     const listElements = document.querySelector('ul');
