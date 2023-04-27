@@ -14,10 +14,16 @@
 </html>
 
 <body>
+  <div class="loader">
+    <p class="loader-top-text" id="loader"></p>
+  </div>
   <div class="container">
     <ul class="ul-list" id="list">
       <!-- Список рендерится из JS -->
     </ul>
+    <div class="loader-bottom">
+      <p class="loader-bottom-text" id="loader-bottom"></p>
+    </div>
     <div class="delite">
       <button class="delite-button" id="delite-comment">Удалить последний комментарий</button>
     </div>
@@ -59,6 +65,11 @@
 
   const editButtonElements = document.querySelectorAll('.comment-body');
 
+  const bodyElement = document.getElementById("loader");
+  const bodyElementBottom = document.getElementById("loader-bottom");
+
+  console.log(bodyElement);
+  console.log(bodyElementBottom);
   // Перенос данных из разметки
 
   let comments = [
@@ -112,13 +123,13 @@
   };
 
   // API
-  
+
   const loadingElement = document.createElement("span");
   loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
-  listElement.appendChild(loadingElement);
+  bodyElement.appendChild(loadingElement);
 
   const getComment = () => {
-    
+
     fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
       {
         method: "GET"
@@ -138,15 +149,21 @@
           };
         });
         renderComments();
-        loadingElement.style.display="none";
+        loadingElement.style.display = "none";
       });
   };
 
+
+
   const fetchComment = () => {
+
     buttonElement.disabled = true;
-    loadingElement.textContent = "Комментарий загружается...";
-    loadingElement.style.display = "block";
-    listElement.appendChild(loadingElement);
+
+    const loadingElementBottom = document.createElement("span");
+    loadingElementBottom.textContent = "Комментарий загружается...";
+    loadingElementBottom.style.display = "block";
+    bodyElementBottom.appendChild(loadingElementBottom);
+
     fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
       method: "POST",
       body: JSON.stringify({
@@ -154,30 +171,30 @@
         text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
       }),
     })
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
-      return fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
-        method: "GET",
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        return fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
+          method: "GET",
+        });
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseData) => {
+        comments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            commentText: comment.text,
+            time: new Date(comment.date).toLocaleString().slice(0, -3),
+            like: comment.likes,
+            likeStatus: comment.isLiked ? true : false,
+          };
+        });
+        renderComments();
+        loadingElementBottom.style.display = "none";
       });
-    })
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
-      comments = responseData.comments.map((comment) => {
-        return {
-          name: comment.author.name,
-          commentText: comment.text,
-          time: new Date(comment.date).toLocaleString().slice(0, -3),
-          like: comment.likes,
-          likeStatus: comment.isLiked ? true : false,
-        };
-      });
-      renderComments();
-      loadingElement.style.display = "none";
-    });
 
   };
 
@@ -270,7 +287,7 @@
   };
   renderComments();
 
-  
+
   // Функция отображает комментарий
 
   function showComment() {
