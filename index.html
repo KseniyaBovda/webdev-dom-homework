@@ -39,7 +39,7 @@
 </body>
 <style>
   .error {
-    background-color: #e91b1bd8;
+    background-color: #e91b1b94;
   }
 
   .error::placeholder {
@@ -153,8 +153,6 @@
       });
   };
 
-
-
   const fetchComment = () => {
 
     buttonElement.disabled = true;
@@ -169,32 +167,45 @@
       body: JSON.stringify({
         name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
         text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+        forceError: true,
       }),
     })
       .then((response) => {
-        return response.json();
+        if (response.status === 500) {
+          throw new Error("Ошибка сервера");
+        }
+
+        if (response.status === 400) {
+          throw new Error("Неверный запрос");
+        }
+
+        else {
+          return response.json();
+        }
       })
-      .then((responseData) => {
-        return fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
-          method: "GET",
-        });
+      .then(() => {
+        return getComment();
       })
-      .then((response) => {
-        return response.json();
+      .then(() => {
+        loadingElementBottom.style.display ="none";
+        nameInputElement.value ="";
+        commentInputElement.value="";
       })
-      .then((responseData) => {
-        comments = responseData.comments.map((comment) => {
-          return {
-            name: comment.author.name,
-            commentText: comment.text,
-            time: new Date(comment.date).toLocaleString().slice(0, -3),
-            like: comment.likes,
-            likeStatus: comment.isLiked ? true : false,
-          };
-        });
-        renderComments();
+      .catch((error) => {
+        buttonElement.disabled = false;
         loadingElementBottom.style.display = "none";
-      });
+        if (error.message === "Ошибка сервера" ) {
+          alert("Что-то с сервером");
+          return;
+        }
+        if (error.message === "Неверный запрос" ) {
+          alert("Введи больше 3х символов");
+          commentInputElement.classList.add("error");
+          nameInputElement.classList.add("error");
+          return;
+        }
+        console.warn(error);
+      })
 
   };
 
@@ -329,8 +340,8 @@
 
     renderComments();
 
-    nameInputElement.value = "";
-    commentInputElement.value = "";
+    // nameInputElement.value = "";
+    // commentInputElement.value = "";
   };
 
   // Через кнопку
