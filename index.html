@@ -187,22 +187,27 @@
         return getComment();
       })
       .then(() => {
-        loadingElementBottom.style.display ="none";
-        nameInputElement.value ="";
-        commentInputElement.value="";
+        loadingElementBottom.style.display = "none";
+        nameInputElement.value = "";
+        commentInputElement.value = "";
       })
       .catch((error) => {
         buttonElement.disabled = false;
         loadingElementBottom.style.display = "none";
-        if (error.message === "Ошибка сервера" ) {
+        if (error.message === "Ошибка сервера") {
           alert("Что-то с сервером");
           return;
         }
-        if (error.message === "Неверный запрос" ) {
+        if (error.message === "Неверный запрос") {
           alert("Введи больше 3х символов");
           commentInputElement.classList.add("error");
           nameInputElement.classList.add("error");
           return;
+        }
+        else {
+          // buttonElement.disabled = false;
+          // loadingElementBottom.style.display = "none";
+          alert("Отсутствует интернет");
         }
         console.warn(error);
       })
