@@ -1,77 +1,35 @@
-import { renderComments, loadingElement, buttonElement, bodyElementBottom, nameInputElement, commentInputElement } from "./index.js"
+const host =  'https://webdev-hw-api.vercel.app/api/v2/:bovda';
 
-let comments = [
-    // {
-    //   name: "Глеб Фокин",
-    //   commentText: "Это будет первый комментарий на этой странице",
-    //   time: "12.02.22 12:18",
-    //   like: 3,
-    //   likeStatus: false,
-    // },
-    // {
-    //   name: "Варвара Н.",
-    //   commentText: "Мне нравится как оформлена эта страница! ❤",
-    //   time: "13.02.22 19:22",
-    //   like: 75,
-    //   likeStatus: false,
-    // }
-];
+export function getCommentAPI({ token }) {
 
-const getComment = () => {
-
-    fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments',
+    return fetch(host + "/comments",
         {
-            method: "GET"
+            method: "GET",
+            headers: {
+                Autorization: token,
+            },
         }).then((response) => {
+            if (response === 401) {
+                throw new Error("Нет авторизации")
+            }
 
             return response.json();
-
-        }).then((responseData) => {
-
-            comments = responseData.comments.map((comment) => {
-                return {
-                    name: comment.author.name,
-                    commentText: comment.text,
-                    time: new Date(comment.date).toLocaleString().slice(0, -3),
-                    like: comment.likes,
-                    likeStatus: comment.isLiked ? true : false,
-                };
-            });
-            renderComments();
-            loadingElement.style.display = "none";
         });
-};
+}
 
-const fetchComment = () => {
+export function fetchCommentAPI({ name, text, forceError, token }) {
 
-    buttonElement.disabled = true;
-
-    const loadingElementBottom = document.createElement("span");
-    loadingElementBottom.textContent = "Комментарий загружается...";
-    loadingElementBottom.style.display = "block";
-    bodyElementBottom.appendChild(loadingElementBottom);
-
-    fetch('https://webdev-hw-api.vercel.app/api/v1/:bovda/comments', {
+    return fetch(host + "/comments", {
         method: "POST",
         body: JSON.stringify({
             name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
             text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
             forceError: true,
-        }),
+        }),            headers: {
+            Autorization: token,
+        }
     })
-        .then((response) => {
-            if (response.status === 500) {
-                throw new Error("Ошибка сервера");
-            }
-
-            if (response.status === 400) {
-                throw new Error("Неверный запрос");
-            }
-
-            else {
-                return response.json();
-            }
-        })
+        .then((response) => checkResponseStatus(response))
         .then(() => {
             return getComment();
         })
@@ -83,24 +41,35 @@ const fetchComment = () => {
         .catch((error) => {
             buttonElement.disabled = false;
             loadingElementBottom.style.display = "none";
-            if (error.message === "Ошибка сервера") {
-                alert("Что-то с сервером");
-                return;
-            }
-            if (error.message === "Неверный запрос") {
-                alert("Введи больше 3х символов");
-                commentInputElement.classList.add("error");
-                nameInputElement.classList.add("error");
-                return;
-            }
-            else {
-                // buttonElement.disabled = false;
-                // loadingElementBottom.style.display = "none";
-                alert("Отсутствует интернет");
-            }
+            parseError(error,[commentInputElement,nameInputElement])
             console.warn(error);
         })
 
 };
 
-export { comments, getComment, fetchComment };
+function checkResponseStatus(response) {
+    if (response.status === 500) {
+        throw new Error("Ошибка сервера");
+    }
+
+    if (response.status === 400) {
+        throw new Error("Неверный запрос");
+    }
+
+    else {
+        return response.json();
+    }
+};
+
+function parseError(error, elements ) {
+    if (error.message === "Ошибка сервера") {
+        alert("Что-то с сервером");
+        return;
+    }
+    if (error.message === "Неверный запрос") {
+        alert("Введи больше 3х символов");
+        elements.forEach((element) => element.classList)
+        return;
+    }
+    alert("Отсутствует интернет");
+}

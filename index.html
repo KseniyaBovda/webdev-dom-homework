@@ -14,38 +14,18 @@
 </html>
 
 <body>
-  <div class="loader">
-    <p class="loader-top-text" id="loader"></p>
-  </div>
-  <div class="container">
-    <ul class="ul-list" id="list">
-      <!-- Список рендерится из JS -->
-    </ul>
-    <div class="loader-bottom">
-      <p class="loader-bottom-text" id="loader-bottom"></p>
-    </div>
-    <div class="delite">
-      <button class="delite-button" id="delite-comment">Удалить последний комментарий</button>
-    </div>
-    <div class="add-form">
-      <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" />
-      <textarea id="comment-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-        rows="4"></textarea>
-      <div class="add-form-row">
-        <button id="add-button" disabled="true" class="add-form-button">Написать</button>
-      </div>
-    </div>
-  </div>
+  <div id="app"></div>
 </body>
+
 <style>
   .error {
     background-color: #e91b1b94;
   }
-
   .error::placeholder {
     color: wheat;
   }
 </style>
+
 <script src="./index.js" type="module"></script>
 
 </html>
