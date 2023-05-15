@@ -6,7 +6,8 @@ body {
   display: none;
   }  
 
-  .container {
+  .container,
+  .app {
     font-family: Helvetica;
     color: #ffffff;
     display: flex;

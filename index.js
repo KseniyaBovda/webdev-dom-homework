@@ -4,49 +4,43 @@ import {getCommentAPI, fetchCommentAPI } from "./API.js";
 import { renderComments, } from "./render.js";
 
 // Перенос данных из разметки
+
 let comments = [];
 
 // Константы
-let token = "Bearer asb4c4boc86gasb4c4boc86g37k3bk3cg3c03ck3k37w3cc3bo3b8";
-// token = null
+
+
 renderComments();
-const buttonElement = document.getElementById("add-button");
+// const buttonDeliteElement = document.getElementById("delite-comment");
 const listElement = document.getElementById("list");
+const buttonElement = document.getElementById("add-button");
 const nameInputElement = document.getElementById("name-input");
 const commentInputElement = document.getElementById("comment-input");
-
-// const buttonDeliteElement = document.getElementById("delite-comment");
 
 const userComments = document.querySelectorAll('.comment');
 const likeButtonsElements = document.querySelectorAll('.likes');
 
-
 const editButtonElements = document.querySelectorAll('.comment-body');
 
-const bodyElement = document.getElementById("loader");
 const bodyElementBottom = document.getElementById("loader-bottom");
+
+const bodyElement = document.getElementById("loader");
+const loadingElement = document.createElement("span");
+loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
+bodyElement.appendChild(loadingElement);
 
 const loadingElementBottom = document.createElement("span");
 loadingElementBottom.textContent = "Комментарий загружается...";
 loadingElementBottom.style.display = "block";
 bodyElementBottom.appendChild(loadingElementBottom);
 
-// buttonElement.disabled = true; 
-// посмотреть откуда берется
-
-
 
 // API
-// buttonElement.disabled = true;
-const loadingElement = document.createElement("span");
-loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
-bodyElement.appendChild(loadingElement);
 
 //Модуль 
   const getComment = () => {
-    return getCommentAPI({ token })
+    return getCommentAPI()
     .then((responseData) => {
-
         comments = responseData.comments.map((comment) => {
             return {
                 name: comment.author.name,
@@ -88,8 +82,6 @@ bodyElement.appendChild(loadingElement);
           return;
         }
         else {
-          // buttonElement.disabled = false;
-          // loadingElementBottom.style.display = "none";
           alert("Отсутствует интернет");
         }
         console.warn(error);
@@ -241,7 +233,7 @@ document.addEventListener('keyup', function (event) {
 
 // Через клик
 
-// buttonElement.addEventListener('click', showComment);
+buttonElement.addEventListener('click', showComment);
 
 // Блок кнопки
 
@@ -273,6 +265,6 @@ function checkValue() {
 //     answers();
 //   });
 
-export { renderComments, loadingElement, bodyElementBottom, comments, initLikeButtonsListeners, initEditButtonListeners, answers, token};
+export { renderComments, loadingElement, bodyElementBottom, comments, initLikeButtonsListeners, initEditButtonListeners, answers,};
 
 console.log("It works!");

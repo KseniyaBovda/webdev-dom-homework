@@ -1,13 +1,16 @@
+import { renderComments } from "./render.js";
+
 const host =  'https://webdev-hw-api.vercel.app/api/v2/:bovda';
 
-export function getCommentAPI({ token }) {
+
+export let token = null;
+
+export function getCommentAPI() {
 
     return fetch(host + "/comments",
         {
             method: "GET",
-            headers: {
-                Autorization: token,
-            },
+
         }).then((response) => {
             if (response === 401) {
                 throw new Error("Нет авторизации")
@@ -25,7 +28,7 @@ export function fetchCommentAPI({ name, text, forceError, token }) {
             name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
             text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
             forceError: true,
-        }),            headers: {
+        }), headers: {
             Autorization: token,
         }
     })
@@ -72,4 +75,20 @@ function parseError(error, elements ) {
         return;
     }
     alert("Отсутствует интернет");
+}
+
+export function Authoriz(name, password) {
+    return fetch("https://webdev-hw-api.vercel.app/api/user/login", {
+    method: "POST",
+    body: JSON.stringify({
+        login: name,
+        password: password,
+    }),    
+}).then((response) => {
+    return response.json()})
+    .then((data) => {
+        token=data.user.token;
+        console.log(token)
+        renderComments();
+    })
 }
