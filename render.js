@@ -85,7 +85,7 @@ export const renderComments = () => {
       type="text"
       class="add-form-name"
       placeholder="Введите ваше имя"
-
+      value="${user.name}"
       disabled
     />
     <textarea
