@@ -20,7 +20,7 @@ export function getCommentAPI() {
         });
 }
 
-export function fetchCommentAPI(text, token) {
+export function fetchCommentAPI(text, token,buttonElement) {
 
     return fetch(host + "/comments", {
         method: "POST",

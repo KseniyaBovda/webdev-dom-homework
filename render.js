@@ -1,15 +1,15 @@
-import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, fetchComment} from "./index.js"
+import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, fetchComment } from "./index.js"
 import { loginForm, } from "./loginForm.js";
-import { token,} from "./API.js";
+import { token, } from "./API.js";
 
 
 
-export const renderComments = ({user} = {}) => {
+export const renderComments = ({ user } = {}) => {
   const appEl = document.getElementById("app");
-  if(!token) {
+  if (!token) {
     const commentsHtml = comments
-    .map((comment, index) => {
-      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
+      .map((comment, index) => {
+        return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
           <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.time}</div>
@@ -29,10 +29,10 @@ export const renderComments = ({user} = {}) => {
             </div>
           </div>
         </li>`
-    }).join("");
+      }).join("");
 
-  const appHtml =
-    `<div class="loader">
+    const appHtml =
+      `<div class="loader">
                 <p class="loader-top-text" id="loader"></p>
       </div>
             <div class="container">
@@ -48,15 +48,15 @@ export const renderComments = ({user} = {}) => {
                 </div>
             </div>`
 
-  appEl.innerHTML = appHtml;
-  const auth = document.getElementById("authorization")
-  auth.addEventListener('click',() => {
-    loginForm();
-  });
+    appEl.innerHTML = appHtml;
+    const auth = document.getElementById("authorization")
+    auth.addEventListener('click', () => {
+      loginForm();
+    });
   } else {
     const commentsHtml = comments
-    .map((comment, index,) => {
-      return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
+      .map((comment, index,) => {
+        return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
           <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.time}</div>
@@ -76,7 +76,7 @@ export const renderComments = ({user} = {}) => {
             </div>
           </div>
         </li>`
-    }).join("");
+      }).join("");
 
     const appHtml = `
    ${commentsHtml}
@@ -99,12 +99,18 @@ export const renderComments = ({user} = {}) => {
       <button class="add-form-button" id="add-button">Написать</button>
     </div>
   </div>`
-  appEl.innerHTML = appHtml;
+    appEl.innerHTML = appHtml;
 
-  const addButton = document.querySelector('#add-button');
-  addButton.addEventListener('click', () => {
-    fetchComment();
-  })
+    const buttonElement = document.getElementById("add-button");
+    buttonElement.addEventListener('click', () => {
+      fetchComment(buttonElement);
+    })
+    // Через кнопку
+
+    document.addEventListener('keyup', function (event) {
+      if (event.code == 'Enter' || event.code == 'NumpadEnter') fetchComment(buttonElement);
+      return;
+    });
   }
 
 

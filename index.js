@@ -13,7 +13,7 @@ let comments = [];
 renderComments();
 // const buttonDeliteElement = document.getElementById("delite-comment");
 const listElement = document.getElementById("list");
-const buttonElement = document.getElementById("add-button");
+
 const nameInputElement = document.getElementById("name-input");
 
 
@@ -54,7 +54,7 @@ bodyElement.appendChild(loadingElement);
     });
   };
 
-  const fetchComment = () => {
+  const fetchComment = (buttonElement) => {
     return fetchCommentAPI()
       .then(() => {
         return getComment();
@@ -213,16 +213,8 @@ function showComment() {
     // commentInputElement.value = "";
 };
 
-// Через кнопку
 
-document.addEventListener('keyup', function (event) {
-    if (event.code == 'Enter' || event.code == 'NumpadEnter') showComment();
-    return;
-});
 
-// Через клик
-
-// buttonElement.addEventListener('click', showComment);
 
 // Блок кнопки
 
