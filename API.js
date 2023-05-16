@@ -20,16 +20,16 @@ export function getCommentAPI() {
         });
 }
 
-export function fetchCommentAPI({ name, text, forceError, token }) {
+export function fetchCommentAPI(text, token) {
 
     return fetch(host + "/comments", {
         method: "POST",
         body: JSON.stringify({
-            name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-            text: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-            forceError: true,
+            // name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+            text
+            // forceError: true,
         }), headers: {
-            Autorization: token,
+            Autorization: `Bearer ${token}`,
         }
     })
         .then((response) => checkResponseStatus(response))
@@ -89,6 +89,6 @@ export function Authoriz(name, password) {
     .then((data) => {
         token=data.user.token;
         console.log(token)
-        renderComments();
+        renderComments({user:data.user});
     })
 }

@@ -1,7 +1,7 @@
 
 // Код писать здесь
 import {getCommentAPI, fetchCommentAPI } from "./API.js";
-import { renderComments, } from "./render.js";
+import { renderComments,} from "./render.js";
 
 // Перенос данных из разметки
 
@@ -15,7 +15,7 @@ renderComments();
 const listElement = document.getElementById("list");
 const buttonElement = document.getElementById("add-button");
 const nameInputElement = document.getElementById("name-input");
-const commentInputElement = document.getElementById("comment-input");
+
 
 const userComments = document.querySelectorAll('.comment');
 const likeButtonsElements = document.querySelectorAll('.likes');
@@ -24,20 +24,19 @@ const editButtonElements = document.querySelectorAll('.comment-body');
 
 const bodyElementBottom = document.getElementById("loader-bottom");
 
-const bodyElement = document.getElementById("loader");
-const loadingElement = document.createElement("span");
-loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
-bodyElement.appendChild(loadingElement);
-
 const loadingElementBottom = document.createElement("span");
 loadingElementBottom.textContent = "Комментарий загружается...";
 loadingElementBottom.style.display = "block";
 bodyElementBottom.appendChild(loadingElementBottom);
 
+const bodyElement = document.getElementById("loader");
+const loadingElement = document.createElement("span");
+loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
+bodyElement.appendChild(loadingElement);
+
 
 // API
 
-//Модуль 
   const getComment = () => {
     return getCommentAPI()
     .then((responseData) => {
@@ -183,11 +182,11 @@ renderComments();
 
 function showComment() {
 
-    nameInputElement.classList.remove("error");
-    if (nameInputElement.value.trim() === '') {
-        nameInputElement.classList.add("error");
-        return;
-    }
+    // // nameInputElement.classList.remove("error");
+    // if (nameInputElement.value.trim() === '') {
+    //     nameInputElement.classList.add("error");
+    //     return;
+    // }
 
     commentInputElement.classList.remove("error");
     if (commentInputElement.value.trim() === '') {
@@ -207,17 +206,7 @@ function showComment() {
         return str;
     }
 
-    // comments.push({
-    //   name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-    //   commentText: commentInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-    //   time: dateElement(),
-    //   like: 0,
-    //   likeStatus: false
-    // });
-    // postComment();
-
     fetchComment();
-
     renderComments();
 
     // nameInputElement.value = "";
@@ -233,7 +222,7 @@ document.addEventListener('keyup', function (event) {
 
 // Через клик
 
-buttonElement.addEventListener('click', showComment);
+// buttonElement.addEventListener('click', showComment);
 
 // Блок кнопки
 
@@ -265,6 +254,6 @@ function checkValue() {
 //     answers();
 //   });
 
-export { renderComments, loadingElement, bodyElementBottom, comments, initLikeButtonsListeners, initEditButtonListeners, answers,};
+export { renderComments,bodyElementBottom, loadingElement, comments, initLikeButtonsListeners, initEditButtonListeners, answers, fetchComment};
 
 console.log("It works!");

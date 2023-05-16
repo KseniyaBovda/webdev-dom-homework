@@ -1,10 +1,10 @@
-import { comments, initLikeButtonsListeners, initEditButtonListeners, answers,  } from "./index.js"
+import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, fetchComment} from "./index.js"
 import { loginForm, } from "./loginForm.js";
 import { token,} from "./API.js";
 
 
 
-export const renderComments = () => {
+export const renderComments = ({user} = {}) => {
   const appEl = document.getElementById("app");
   if(!token) {
     const commentsHtml = comments
@@ -34,7 +34,7 @@ export const renderComments = () => {
   const appHtml =
     `<div class="loader">
                 <p class="loader-top-text" id="loader"></p>
-            </div>
+      </div>
             <div class="container">
                 <ul class="ul-list" id="list">
                 <!-- Список рендерится из JS -->
@@ -92,6 +92,7 @@ export const renderComments = () => {
       type="textarea"
       class="add-form-text"
       placeholder="Введите ваш коментарий"
+      id="text-input"
       rows="4"
     ></textarea>
     <div class="add-form-row">
@@ -99,9 +100,13 @@ export const renderComments = () => {
     </div>
   </div>`
   appEl.innerHTML = appHtml;
+
+  const addButton = document.querySelector('#add-button');
+  addButton.addEventListener('click', () => {
+    fetchComment();
+  })
   }
 
-  
 
   initLikeButtonsListeners();
   initEditButtonListeners();
