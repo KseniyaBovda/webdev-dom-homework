@@ -4,31 +4,32 @@ import { token, } from "./API.js";
 
 
 
+
 export const renderComments = ({ user } = {}) => {
   const appEl = document.getElementById("app");
   if (!token) {
     const commentsHtml = comments
       .map((comment, index) => {
         return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
-          <div class="comment-header">
-            <div>${comment.name}</div>
-            <div>${comment.time}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${comment.commentText}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="edit">
-                <button class="edit-button" data-edit="${index}">Редактировать</button>
-              </div>
-            <div class="likes" data-button="${index}" data-counter="${comment.like}">
-              <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
-              <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
-            </div>
-          </div>
-        </li>`
+    <div class="comment-header">
+      <div>${comment.name}</div>
+      <div>${comment.time}</div>
+    </div>
+    <div class="comment-body">
+      <div class="comment-text">
+        ${comment.commentText}
+      </div>
+    </div>
+    <div class="comment-footer">
+      <div class="edit">
+          <button class="edit-button" data-edit="${index}">Редактировать</button>
+        </div>
+      <div class="likes" data-button="${index}" data-counter="${comment.like}">
+        <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
+        <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
+      </div>
+    </div>
+  </li>`
       }).join("");
 
     const appHtml =
@@ -55,27 +56,27 @@ export const renderComments = ({ user } = {}) => {
     });
   } else {
     const commentsHtml = comments
-      .map((comment, index,) => {
+      .map((comment, index) => {
         return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
-          <div class="comment-header">
-            <div>${comment.name}</div>
-            <div>${comment.time}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${comment.commentText}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="edit">
-                <button class="edit-button" data-edit="${index}">Редактировать</button>
-              </div>
-            <div class="likes" data-button="${index}" data-counter="${comment.like}">
-              <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
-              <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
-            </div>
-          </div>
-        </li>`
+    <div class="comment-header">
+      <div>${comment.name}</div>
+      <div>${comment.time}</div>
+    </div>
+    <div class="comment-body">
+      <div class="comment-text">
+        ${comment.commentText}
+      </div>
+    </div>
+    <div class="comment-footer">
+      <div class="edit">
+          <button class="edit-button" data-edit="${index}">Редактировать</button>
+        </div>
+      <div class="likes" data-button="${index}" data-counter="${comment.like}">
+        <span class="likes-counter" data-counter="${comment.like}">${comment.like}</span>
+        <button class = "like-button ${(comment.likeStatus === true) ? '-active-like' : ''}" data-button="${index}"></button>
+      </div>
+    </div>
+  </li>`
       }).join("");
 
     const appHtml = `
@@ -101,12 +102,13 @@ export const renderComments = ({ user } = {}) => {
   </div>`
     appEl.innerHTML = appHtml;
 
+    // Через клик 
     const buttonElement = document.getElementById("add-button");
     buttonElement.addEventListener('click', () => {
       fetchComment(buttonElement);
     })
-    // Через кнопку
 
+    // Через кнопку
     document.addEventListener('keyup', function (event) {
       if (event.code == 'Enter' || event.code == 'NumpadEnter') fetchComment(buttonElement);
       return;

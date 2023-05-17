@@ -29,7 +29,7 @@ export function fetchCommentAPI(text, token,buttonElement) {
             text
             // forceError: true,
         }), headers: {
-            Autorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         }
     })
         .then((response) => checkResponseStatus(response))
@@ -77,7 +77,7 @@ function parseError(error, elements ) {
     alert("Отсутствует интернет");
 }
 
-export function Authoriz(name, password) {
+export function Authoriz(name, password,) {
     return fetch("https://webdev-hw-api.vercel.app/api/user/login", {
     method: "POST",
     body: JSON.stringify({
@@ -88,7 +88,6 @@ export function Authoriz(name, password) {
     return response.json()})
     .then((data) => {
         token=data.user.token;
-        console.log(token)
         renderComments({user:data.user});
     })
 }

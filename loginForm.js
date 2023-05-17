@@ -1,4 +1,4 @@
-import { Authoriz } from "./API.js";
+import { Authoriz, token } from "./API.js";
 export function loginForm() {
     const appEl = document.getElementById("app");
     
@@ -17,7 +17,7 @@ appEl.innerHTML = loginForm;
 document.querySelector(".login-button").addEventListener("click", () => {
     let name=document.getElementById("login-input").value;
     let password=document.getElementById("password-input").value;
-    Authoriz(name, password)
+    Authoriz(name, password,)
 })
 
 };

@@ -13,17 +13,15 @@ let comments = [];
 renderComments();
 // const buttonDeliteElement = document.getElementById("delite-comment");
 const listElement = document.getElementById("list");
+const userComments = document.querySelectorAll('.comment');
+const likeButtonsElements = document.querySelectorAll('.likes');
+const editButtonElements = document.querySelectorAll('.comment-body');
 
 const nameInputElement = document.getElementById("name-input");
 
-
-const userComments = document.querySelectorAll('.comment');
-const likeButtonsElements = document.querySelectorAll('.likes');
-
-const editButtonElements = document.querySelectorAll('.comment-body');
+// Лоадеры 
 
 const bodyElementBottom = document.getElementById("loader-bottom");
-
 const loadingElementBottom = document.createElement("span");
 loadingElementBottom.textContent = "Комментарий загружается...";
 loadingElementBottom.style.display = "block";
@@ -55,7 +53,7 @@ bodyElement.appendChild(loadingElement);
   };
 
   const fetchComment = (buttonElement) => {
-    return fetchCommentAPI()
+    return fetchCommentAPI(text, token, buttonElement)
       .then(() => {
         return getComment();
       })
@@ -180,41 +178,38 @@ renderComments();
 
 // Функция отображает комментарий
 
-function showComment() {
+// function showComment() {
 
-    // // nameInputElement.classList.remove("error");
-    // if (nameInputElement.value.trim() === '') {
-    //     nameInputElement.classList.add("error");
-    //     return;
-    // }
+//     // // nameInputElement.classList.remove("error");
+//     // if (nameInputElement.value.trim() === '') {
+//     //     nameInputElement.classList.add("error");
+//     //     return;
+//     // }
 
-    commentInputElement.classList.remove("error");
-    if (commentInputElement.value.trim() === '') {
-        commentInputElement.classList.add("error");
-        return;
-    }
+//     commentInputElement.classList.remove("error");
+//     if (commentInputElement.value.trim() === '') {
+//         commentInputElement.classList.add("error");
+//         return;
+//     }
 
-    function dateElement() {
-        let date = new Date();
-        let monthArray = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-        let minute = String(date.getMinutes().length < 2 ? '0' + date.getMinutes() : date.getMinutes());
-        let hour = String(date.getHours().length < 2 ? '0' + date.getHours() : date.getHours());
-        let day = String(date.getDate().length < 2 ? '0' + date.getDate() : date.getDate());
-        let month = monthArray[+date.getMonth()]
-        let year = String(date.getFullYear()).slice(2)
-        let str = day + '.' + month + '.' + year + ' ' + hour + ':' + minute;
-        return str;
-    }
+//     function dateElement() {
+//         let date = new Date();
+//         let monthArray = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+//         let minute = String(date.getMinutes().length < 2 ? '0' + date.getMinutes() : date.getMinutes());
+//         let hour = String(date.getHours().length < 2 ? '0' + date.getHours() : date.getHours());
+//         let day = String(date.getDate().length < 2 ? '0' + date.getDate() : date.getDate());
+//         let month = monthArray[+date.getMonth()]
+//         let year = String(date.getFullYear()).slice(2)
+//         let str = day + '.' + month + '.' + year + ' ' + hour + ':' + minute;
+//         return str;
+//     }
 
-    fetchComment();
-    renderComments();
+//     fetchComment();
+//     renderComments();
 
-    // nameInputElement.value = "";
-    // commentInputElement.value = "";
-};
-
-
-
+//     // nameInputElement.value = "";
+//     // commentInputElement.value = "";
+// };
 
 // Блок кнопки
 
