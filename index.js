@@ -1,8 +1,7 @@
-
 // Код писать здесь
 import {getCommentAPI, fetchCommentAPI, token} from "./API.js";
 import { renderComments, text,buttonElement } from "./render.js";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 
 // Перенос данных из разметки
 
