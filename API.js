@@ -1,9 +1,11 @@
 import { renderComments } from "./render.js";
+import { commentInputElement, nameInputElement,loadingElement,loadingElementBottom } from "./index.js";
 
 const host =  'https://webdev-hw-api.vercel.app/api/v2/:bovda';
 
-
 export let token = null;
+export let comments = [];
+renderComments();
 
 export function getCommentAPI() {
 
@@ -11,7 +13,8 @@ export function getCommentAPI() {
         {
             method: "GET",
 
-        }).then((response) => {
+        })
+        .then((response) => {
             if (response === 401) {
                 throw new Error("Нет авторизации")
             }
@@ -19,6 +22,26 @@ export function getCommentAPI() {
             return response.json();
         });
 }
+
+export const getComment = () => {
+    return getCommentAPI()
+    .then((responseData) => {
+        comments = responseData.comments.map((comment) => {
+            return {
+                name: comment.author.name,
+                commentText: comment.text,
+                time: new Date(comment.date).toLocaleString().slice(0, -3),
+                like: comment.likes,
+                likeStatus: comment.isLiked ? true : false,
+            };
+        });
+        renderComments( );
+        loadingElement.style.display = "none";
+    });
+  };
+
+getComment();
+
 
 export function fetchCommentAPI(text, token,buttonElement) {
 
@@ -38,13 +61,13 @@ export function fetchCommentAPI(text, token,buttonElement) {
         })
         .then(() => {
             loadingElementBottom.style.display = "none";
-            nameInputElement.value = "";
-            commentInputElement.value = "";
+            // nameInputElement.value = "";
+            // commentInputElement.value = "";
         })
         .catch((error) => {
             buttonElement.disabled = false;
             loadingElementBottom.style.display = "none";
-            parseError(error,[commentInputElement,nameInputElement])
+            parseError(error,[text,nameInputElement])
             console.warn(error);
         })
 
@@ -88,6 +111,8 @@ export function Authoriz(name, password,) {
     return response.json()})
     .then((data) => {
         token=data.user.token;
-        renderComments({user:data.user});
+        name=data.user.name;
+        
+        renderComments(name);
     })
 }

@@ -1,87 +1,30 @@
 // Код писать здесь
-import {getCommentAPI, fetchCommentAPI, token} from "./API.js";
+import {getCommentAPI, fetchCommentAPI, token,comments} from "./API.js";
 import { renderComments, text,buttonElement } from "./render.js";
 // import { format } from "date-fns";
 
 // Перенос данных из разметки
 
-let comments = [];
-renderComments();
+
 
 // Константы
 
-const nameInputElement = document.getElementById("name-input");
-const commentInputElement = document.getElementById("text-input");
+export const nameInputElement = document.getElementById("name-input");
+export const commentInputElement = document.getElementById("text-input");
 
 // Лоадеры 
 
-const bodyElementBottom = document.getElementById("loader-bottom");
-const loadingElementBottom = document.createElement("span");
+export const bodyElementBottom = document.getElementById("loader-bottom");
+export const loadingElementBottom = document.createElement("span");
 loadingElementBottom.textContent = "Комментарий загружается...";
 loadingElementBottom.style.display = "block";
 bodyElementBottom.appendChild(loadingElementBottom);
 
-const bodyElement = document.getElementById("loader");
-const loadingElement = document.createElement("span");
+export const bodyElement = document.getElementById("loader");
+export const loadingElement = document.createElement("span");
 loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
 bodyElement.appendChild(loadingElement);
 
-
-// API
-
-  const getComment = () => {
-    return getCommentAPI()
-    .then((responseData) => {
-        comments = responseData.comments.map((comment) => {
-            return {
-                name: comment.author.name,
-                commentText: comment.text,
-                time: new Date(comment.date).toLocaleString().slice(0, -3),
-                like: comment.likes,
-                likeStatus: comment.isLiked ? true : false,
-            };
-        });
-        renderComments();
-        loadingElement.style.display = "none";
-    });
-  };
-
-//   const fetchComment = () => {
-//     return fetchCommentAPI(text, token, buttonElement )
-//       .then(() => {
-//         return getComment();
-//       })
-//       .then((data) => {
-//         loadingElementBottom.style.display = "none";
-//         nameInputElement.value = "";
-//         commentInputElement.value = "";
-//         if (data) {
-//             console.log(data);
-//         }
-//         renderComments();
-//       })
-//       .catch((error) => {
-//         buttonElement.disabled = false;
-//         loadingElementBottom.style.display = "none";
-//         if (error.message === "Ошибка сервера") {
-//           alert("Что-то с сервером");
-//           return;
-//         }
-//         if (error.message === "Неверный запрос") {
-//           alert("Введи больше 3х символов");
-//           commentInputElement.classList.add("error");
-//           nameInputElement.classList.add("error");
-//           return;
-//         }
-//         else {
-//           alert("Отсутствует интернет");
-//         }
-//         console.warn(error);
-//       })
-
-//   };
-
-getComment();
 
 // Обработчик клика лайка
 
@@ -191,6 +134,6 @@ function checkValue() {
 // commentInputElement.addEventListener('input', checkValue);
 
 
-export { renderComments,bodyElementBottom, loadingElement, comments, initLikeButtonsListeners, initEditButtonListeners, answers,};
+export { renderComments, initLikeButtonsListeners, initEditButtonListeners, answers,};
 
 console.log("It works!");

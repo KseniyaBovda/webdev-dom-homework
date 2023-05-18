@@ -1,5 +1,6 @@
 // Функция отображает комментарий
-// const buttonDeliteElement = document.getElementById("delite-comment");
+
+
 
 // function showComment() {
 
@@ -36,7 +37,9 @@
 
 // Удаление последнего элемента
 
+
  //const listElement = document.getElementById("list");
+ // const buttonDeliteElement = document.getElementById("delite-comment");
 
 //   buttonDeliteElement.addEventListener("click", () => {
 //     const listElements = document.querySelector('ul');
@@ -46,3 +49,24 @@
 //     initEditButtonListeners();
 //     answers();
 //   });
+
+// API
+
+// export const getComment = () => {
+//     return getCommentAPI()
+//     .then((responseData) => {
+//         comments = responseData.comments.map((comment) => {
+//             return {
+//                 name: comment.author.name,
+//                 commentText: comment.text,
+//                 time: new Date(comment.date).toLocaleString().slice(0, -3),
+//                 like: comment.likes,
+//                 likeStatus: comment.isLiked ? true : false,
+//             };
+//         });
+//         renderComments();
+//         loadingElement.style.display = "none";
+//     });
+//   };
+
+// getComment();

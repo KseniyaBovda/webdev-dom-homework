@@ -1,12 +1,12 @@
-import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, } from "./index.js"
+import {  initLikeButtonsListeners, initEditButtonListeners, answers, } from "./index.js"
 import { loginForm, } from "./loginForm.js";
-import { fetchCommentAPI, token, } from "./API.js";
+import { fetchCommentAPI, token,comments, } from "./API.js";
 
 
 export let text = null;
 export let buttonElement ;
 
-export const renderComments = ({ user } = {}) => {
+export const renderComments = (name) => {
   const appEl = document.getElementById("app");
   if (!token) {
     const commentsHtml = comments
@@ -87,7 +87,7 @@ export const renderComments = ({ user } = {}) => {
       type="text"
       class="add-form-name"
       placeholder="Введите ваше имя"
-      value="${user.name}"
+      value="${name}"
       disabled
     />
     <textarea
@@ -107,9 +107,9 @@ export const renderComments = ({ user } = {}) => {
       buttonElement=document.getElementById("add-button");
 
 
-    const inputText = document.getElementById("text-input")
-    inputText.addEventListener('input', ()=> {
-    text = inputText.value;
+    const commentInputElement = document.getElementById("text-input")
+    commentInputElement.addEventListener('input', ()=> {
+    text = commentInputElement.value;
       console.log(text);
     })
 
