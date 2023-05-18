@@ -1,9 +1,10 @@
-import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, fetchComment } from "./index.js"
+import { comments, initLikeButtonsListeners, initEditButtonListeners, answers, } from "./index.js"
 import { loginForm, } from "./loginForm.js";
-import { token, } from "./API.js";
+import { fetchCommentAPI, token, } from "./API.js";
 
 
-
+export let text = null;
+export let buttonElement ;
 
 export const renderComments = ({ user } = {}) => {
   const appEl = document.getElementById("app");
@@ -103,14 +104,24 @@ export const renderComments = ({ user } = {}) => {
     appEl.innerHTML = appHtml;
 
     // Через клик 
-    const buttonElement = document.getElementById("add-button");
+      buttonElement=document.getElementById("add-button");
+
+
+    const inputText = document.getElementById("text-input")
+    inputText.addEventListener('input', ()=> {
+    text = inputText.value;
+      console.log(text);
+    })
+
+    
+
     buttonElement.addEventListener('click', () => {
-      fetchComment(buttonElement);
+      fetchCommentAPI(text, token,buttonElement);
     })
 
     // Через кнопку
     document.addEventListener('keyup', function (event) {
-      if (event.code == 'Enter' || event.code == 'NumpadEnter') fetchComment(buttonElement);
+      if (event.code == 'Enter' || event.code == 'NumpadEnter') fetchCommentAPI();
       return;
     });
   }
