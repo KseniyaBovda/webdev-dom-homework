@@ -1,4 +1,4 @@
-import { Authoriz, token } from "./API.js";
+import { Authoriz, Register, token } from "./API.js";
 
 export function loginForm() {
     const appEl = document.getElementById("app");
@@ -19,9 +19,39 @@ export function loginForm() {
         appEl.innerHTML = loginForm;
     
         document.querySelector(".login-button").addEventListener("click", () => {
-            let name=document.getElementById("login-input").value;
-            let password=document.getElementById("password-input").value;
-            Authoriz(name, password,)
+            if (islodinMode) {
+                let login=document.getElementById("login-input").value;
+                let password=document.getElementById("password-input").value;
+                if (!login) {
+                    alert("Введите логин");
+                    return;
+                }
+                if (!password) {
+                    alert("Введите пароль")
+                    return;
+                }
+                Authoriz(login, password,)
+            } else {
+                let name=document.getElementById("name-input").value;
+                let login=document.getElementById("login-input").value;
+                let password=document.getElementById("password-input").value;
+                if (!name) {
+                    alert("Введите имя");
+                    return;
+                }
+        
+                if (!login) {
+                    alert("Введите логин");
+                    return;
+                }
+
+                if (!password) {
+                    alert("Введите пароль")
+                    return;
+                }
+                Register(login, password, name)
+            }
+
         });
     
         document.querySelector(".authorization-button").addEventListener("click", () => {

@@ -108,11 +108,11 @@ function parseError(error, elements ) {
     alert("Отсутствует интернет");
 }
 
-export function Authoriz(name, password,) {
+export function Authoriz(login, password,name) {
     return fetch("https://webdev-hw-api.vercel.app/api/user/login", {
     method: "POST",
     body: JSON.stringify({
-        login: name,
+        login: login,
         password: password,
     }),    
 }).then((response) => {
@@ -120,6 +120,24 @@ export function Authoriz(name, password,) {
     .then((data) => {
         token=data.user.token;
         name=data.user.name;
+        console.log(name);
+        renderComments(name);
+    })
+}
+
+export function Register(login, password,name) {
+    return fetch("https://webdev-hw-api.vercel.app/api/user", {
+    method: "POST",
+    body: JSON.stringify({
+        login: login,
+        password: password,
+        name: name,
+    }),    
+}).then((response) => {
+    return response.json()})
+    .then((data) => {
+        token=data.user.token;
+        // name=data.user.name;
         console.log(name);
         renderComments(name);
     })
