@@ -1,14 +1,17 @@
-import { renderComments } from "./render.js";
-import { commentInputElement, nameInputElement,loadingElement,loadingElementBottom } from "./index.js";
+import { renderComments, buttonElement,loadingElementBottom,} from "./render.js";
+import { commentInputElement, nameInputElement,} from "./index.js";
 
 const host =  'https://webdev-hw-api.vercel.app/api/v2/:bovda';
 
 export let token = null;
 export let comments = [];
+
+
 renderComments();
+;
+
 
 export function getCommentAPI() {
-
     return fetch(host + "/comments",
         {
             method: "GET",
@@ -23,7 +26,7 @@ export function getCommentAPI() {
         });
 }
 
-export const getComment = () => {
+export const getComment = (name) => {
     return getCommentAPI()
     .then((responseData) => {
         comments = responseData.comments.map((comment) => {
@@ -35,15 +38,18 @@ export const getComment = () => {
                 likeStatus: comment.isLiked ? true : false,
             };
         });
-        renderComments( );
-        loadingElement.style.display = "none";
+        renderComments(name);
+        const loadingElement = document.querySelector(".loader")
+        if (loadingElement) {
+            loadingElement.style.display = "none";
+        }
     });
   };
 
 getComment();
 
 
-export function fetchCommentAPI(text, token,buttonElement) {
+export function fetchCommentAPI(text, token,name) {
 
     return fetch(host + "/comments", {
         method: "POST",
@@ -57,7 +63,7 @@ export function fetchCommentAPI(text, token,buttonElement) {
     })
         .then((response) => checkResponseStatus(response))
         .then(() => {
-            return getComment();
+            return getComment(name);
         })
         .then(() => {
             loadingElementBottom.style.display = "none";
@@ -67,8 +73,10 @@ export function fetchCommentAPI(text, token,buttonElement) {
         .catch((error) => {
             buttonElement.disabled = false;
             loadingElementBottom.style.display = "none";
-            parseError(error,[text,nameInputElement])
+            parseError(error,[text,name])
             console.warn(error);
+        }).then(()=>{
+            loadingElementBottom.style.display = "block";
         })
 
 };
@@ -112,7 +120,7 @@ export function Authoriz(name, password,) {
     .then((data) => {
         token=data.user.token;
         name=data.user.name;
-        
+        console.log(name);
         renderComments(name);
     })
 }

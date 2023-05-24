@@ -70,3 +70,7 @@
 //   };
 
 // getComment();
+
+{/* <div class="delite">
+<button class="delite-button" id="delite-comment">Удалить последний комментарий</button>
+</div>  */}

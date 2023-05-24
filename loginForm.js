@@ -1,39 +1,45 @@
 import { Authoriz, token } from "./API.js";
+
 export function loginForm() {
     const appEl = document.getElementById("app");
     
     const loginForm = 
-`  <div class="login-form">
+    `<div class="login-form">
         <b class="heading">Форма входа</b>
         <input id="login-input" type="text" class="login-form-login" placeholder="Введите логин" />
         <input id="password-input" type="password" class="login-form-password" placeholder="Введите пароль" />
         <button class="login-button">Войти</button>
-        <button class="authorization-button">Зарегистрироваться</button>
-    </div>   
-     
-`
-appEl.innerHTML = loginForm;
+        <button id="authorization-button" class="authorization-button">Зарегистрироваться</button>
+    </div>`
+    appEl.innerHTML = loginForm;
 
-document.querySelector(".login-button").addEventListener("click", () => {
-    let name=document.getElementById("login-input").value;
-    let password=document.getElementById("password-input").value;
-    Authoriz(name, password,)
-})
+    document.querySelector(".login-button").addEventListener("click", () => {
+        let name=document.getElementById("login-input").value;
+        let password=document.getElementById("password-input").value;
+        Authoriz(name, password,)
+    })
 
 };
 
 
 
-// export const addForm = 
-// `                <div class="add-form">
-// <input id="name-input" type="text" class="add-form-name" placeholder="Введите ваше имя" />
-// <textarea id="comment-input" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-//     rows="4"></textarea>
-// <div class="add-form-row">
-//   <button id="add-button" disabled="true" class="add-form-button">Написать</button>
-// </div>
-// </div>`;
+export function RegForm() {
+    const appEl = document.getElementById("app");
 
-{/* <div class="delite">
-<button class="delite-button" id="delite-comment">Удалить последний комментарий</button>
-</div>  */}
+    const regForm = 
+    `<div class="reg-form">
+        <b class="heading">Форма регистрации</b>
+        <input id="name-input" type="text" class="reg-form-name" placeholder="Введите логин" />
+        <input id="login-input" type="text" class="login-form-login" placeholder="Введите логин" />
+        <input id="password-input" type="password" class="login-form-password" placeholder="Введите пароль" />
+        <button class="login-button">Войти</button>
+        <button class="authorization-button">Зарегистрироваться</button>
+    </div>`;
+    appEl.innerHTML = regForm;
+
+    document.querySelector(".authorization-button").addEventListener("click", () => {
+        let name=document.getElementById("login-input").value;
+        let password=document.getElementById("password-input").value;
+        Authoriz(name, password,)
+    })
+};
