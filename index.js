@@ -3,26 +3,10 @@ import {comments} from "./API.js";
 import { renderComments,buttonElement } from "./render.js";
 // import { format } from "date-fns";
 
-// Перенос данных из разметки
-
-
-// Константы
+// Константы input
 
 export const nameInputElement = document.getElementById("name-input");
 export const commentInputElement = document.getElementById("text-input");
-
-// Лоадеры 
-
-// export const bodyElementBottom = document.getElementById("loader-bottom");
-// export const loadingElementBottom = document.createElement("span");
-// loadingElementBottom.textContent = "Комментарий загружается...";
-// loadingElementBottom.style.display = "block";
-// bodyElementBottom.appendChild(loadingElementBottom);
-
-// export const bodyElement = document.getElementById("loader");
-// export const loadingElement = document.createElement("span");
-// loadingElement.textContent = "Пожалуйста подождите, комментарии загружаются...";
-// bodyElement.appendChild(loadingElement);
 
 
 // Обработчик клика лайка
@@ -110,7 +94,7 @@ function answers() {
         })
     }
 };
-renderComments(name);
+renderComments();
 
 
 // Блок кнопки
