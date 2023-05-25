@@ -1,4 +1,4 @@
-import { Authoriz, Register, token } from "./API.js";
+import { authoriz, register, token } from "./API.js";
 
 export function loginForm() {
     const appEl = document.getElementById("app");
@@ -27,10 +27,10 @@ export function loginForm() {
                     return;
                 }
                 if (!password) {
-                    alert("Введите пароль")
+                    alert("Введите пароль");
                     return;
                 }
-                Authoriz(login, password,)
+                authoriz(login, password,)
             } else {
                 let name=document.getElementById("name-input").value;
                 let login=document.getElementById("login-input").value;
@@ -49,7 +49,7 @@ export function loginForm() {
                     alert("Введите пароль")
                     return;
                 }
-                Register(login, password, name)
+                register(login, password, name)
             }
 
         });

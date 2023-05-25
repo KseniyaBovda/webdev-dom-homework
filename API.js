@@ -72,8 +72,10 @@ export function fetchCommentAPI(text, token,name) {
         })
         .catch((error) => {
             buttonElement.disabled = false;
-            loadingElementBottom.style.display = "none";
             parseError(error,[text,name])
+            if (loadingElementBottom) {
+                loadingElementBottom.style.display = "none";
+            }
             console.warn(error);
         }).then(()=>{
             loadingElementBottom.style.display = "block";
@@ -108,7 +110,7 @@ function parseError(error, elements ) {
     alert("Отсутствует интернет");
 }
 
-export function Authoriz(login, password,name) {
+export function authoriz(login, password,name) {
     return fetch("https://webdev-hw-api.vercel.app/api/user/login", {
     method: "POST",
     body: JSON.stringify({
@@ -125,7 +127,7 @@ export function Authoriz(login, password,name) {
     })
 }
 
-export function Register(login, password,name) {
+export function register(login, password,name) {
     return fetch("https://webdev-hw-api.vercel.app/api/user", {
     method: "POST",
     body: JSON.stringify({
@@ -137,8 +139,8 @@ export function Register(login, password,name) {
     return response.json()})
     .then((data) => {
         token=data.user.token;
-        // name=data.user.name;
         console.log(name);
         renderComments(name);
     })
+
 }
