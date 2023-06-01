@@ -1,24 +1,25 @@
 import { initLikeButtonsListeners, initEditButtonListeners, answers, } from "./index.js"
 import { loginForm, } from "./loginForm.js";
 import { fetchCommentAPI, token, comments,} from "./API.js";
-
+import { formatDateToRu, formatDateToUs } from "./formatDate.js";
+import { format } from "date-fns";
 
 export let text = null;
 export let buttonElement;
+
 export const loadingElementBottom = document.createElement("span");
 
 
-
 export const renderComments = (name) => {
-
   const appEl = document.getElementById("app");   
   if (!token) {
     const commentsHtml = comments
       .map((comment, index) => {
+        const createDate = format(new Date(comment.time), 'yyy-mm-dd hh.mm.ss'); 
         return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
           <div class="comment-header">
             <div>${comment.name}</div>
-            <div>${comment.time}</div>
+            <div>${createDate}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
@@ -59,10 +60,11 @@ export const renderComments = (name) => {
   } else {
     const commentsHtml = comments
       .map((comment, index) => {
+        const createDate = format(new Date(comment.time), 'yyy-mm-dd hh.mm.ss');
         return `<li class="comment" data-indx="${index}" data-comment="${comment.commentText}" data-name="${comment.name}">
     <div class="comment-header">
       <div>${comment.name}</div>
-      <div>${comment.time}</div>
+      <div>${createDate}</div>
     </div>
     <div class="comment-body">
       <div class="comment-text">
@@ -117,7 +119,7 @@ export const renderComments = (name) => {
     })
 
     buttonElement.addEventListener('click', () => {
-      loadingElementBottom.textContent = "Пожалуйста подождите, комментарии загружаются...";
+      loadingElementBottom.textContent = "Пожалуйста подождите, комментарий загружается...";
       document.getElementById("loader-bottom").appendChild(loadingElementBottom);
       fetchCommentAPI(text, token, name);
     })

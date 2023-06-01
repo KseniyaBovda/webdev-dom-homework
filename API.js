@@ -33,7 +33,7 @@ export const getComment = (name) => {
             return {
                 name: comment.author.name,
                 commentText: comment.text,
-                time: new Date(comment.date).toLocaleString().slice(0, -3),
+                time: comment.date, // поменяла 
                 like: comment.likes,
                 likeStatus: comment.isLiked ? true : false,
             };
